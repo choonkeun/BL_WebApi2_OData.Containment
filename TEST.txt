@@ -1,0 +1,57 @@
+https://docs.microsoft.com/en-us/aspnet/web-api/overview/odata-support-in-aspnet-web-api/odata-v4/odata-actions-and-functions
+https://damienbod.com/2014/06/10/getting-started-with-web-api-and-odata-v4/
+https://damienbod.com/2014/06/13/web-api-and-odata-v4-queries-functions-and-attribute-routing-part-2/
+http://www.odata.org/getting-started/basic-tutorial/
+http://www.odata.org/documentation/odata-version-2-0/uri-conventions/
+
+https://docs.microsoft.com/en-us/aspnet/web-api/overview/odata-support-in-aspnet-web-api/odata-v4/odata-containment-in-web-api-22
+
+Odata V4 has "Singleton" and "Containment"
+
+Contained entities which is "Orders" don't have their own controller; 
+the action is defined in the containing entity set controller.
+ 
+In this sample, there is an EmployeeController, but no OrderController.
+=====================================================
+orders table only can be accessed thru Employee Table
+=====================================================
+
+---http://localhost:1057/odata/Employee(1)/Orders/FunctionService.GetCustomerOrderCount(CustomerID='ERNSH') -- working
+{
+  "@odata.context":"http://localhost:1057/odata/$metadata#Edm.Int32","value":5
+}
+
+---http://localhost:1057/odata/Employee(1)/Orders/FunctionService.GetCustomerOrderList(CustomerID='ERNSH') -- working
+{
+  "@odata.context":"http://localhost:1057/odata/$metadata#Edm.Int32","value":5
+}
+
+
+---http://localhost:1057/odata/Employee(1)/Orders(10921)
+{
+  "@odata.context":"http://localhost:1057/odata/$metadata#Employee(1)/Orders/$entity",
+  "OrderID":10921,"CustomerID":"VAFFE","EmployeeID":1,"OrderDate":"1998-03-03T00:00:00-08:00","RequiredDate":"1998-04-14T00:00:00-07:00","ShippedDate":"1998-03-09T00:00:00-08:00","ShipVia":1,"Freight":176.4800,"ShipName":"Vaffeljernet","ShipAddress":"Smagsloget 45","ShipCity":"\u00c5rhus","ShipRegion":null,"ShipPostalCode":"8200","ShipCountry":"Denmark"
+}
+
+---http://localhost:1057/odata/Employee(1)/Orders
+---http://localhost:1057/odata/Employee(1)/Orders?$count=true
+{
+  "@odata.context":"http://localhost:1057/odata/$metadata#Employee(1)/Orders","@odata.count":123,"value":[
+    {
+      "OrderID":10258,"CustomerID":"ERNSH","EmployeeID":1,"OrderDate":"1996-07-17T00:00:00-07:00","RequiredDate":"1996-08-14T00:00:00-07:00","ShippedDate":"1996-07-23T00:00:00-07:00","ShipVia":1,"Freight":140.5100,"ShipName":"Ernst Handel","ShipAddress":"Kirchgasse 6","ShipCity":"Graz","ShipRegion":null,"ShipPostalCode":"8010","ShipCountry":"Austria"
+    },{
+      "OrderID":10270,"CustomerID":"WARTH","EmployeeID":1,"OrderDate":"1996-08-01T00:00:00-07:00","RequiredDate":"1996-08-29T00:00:00-07:00","ShippedDate":"1996-08-02T00:00:00-07:00","ShipVia":1,"Freight":136.5400,"ShipName":"Wartian Herkku","ShipAddress":"Torikatu 38","ShipCity":"Oulu","ShipRegion":null,"ShipPostalCode":"90110","ShipCountry":"Finland"
+    },
+    ...
+    {
+      "OrderID":11069,"CustomerID":"TORTU","EmployeeID":1,"OrderDate":"1998-05-04T00:00:00-07:00","RequiredDate":"1998-06-01T00:00:00-07:00","ShippedDate":"1998-05-06T00:00:00-07:00","ShipVia":2,"Freight":15.6700,"ShipName":"Tortuga Restaurante","ShipAddress":"Avda. Azteca 123","ShipCity":"M\u00e9xico D.F.","ShipRegion":null,"ShipPostalCode":"05033","ShipCountry":"Mexico"
+    },{
+      "OrderID":11071,"CustomerID":"LILAS","EmployeeID":1,"OrderDate":"1998-05-05T00:00:00-07:00","RequiredDate":"1998-06-02T00:00:00-07:00","ShippedDate":null,"ShipVia":1,"Freight":0.9300,"ShipName":"LILA-Supermercado","ShipAddress":"Carrera 52 con Ave. Bol\u00edvar #65-98 Llano Largo","ShipCity":"Barquisimeto","ShipRegion":"Lara","ShipPostalCode":"3508","ShipCountry":"Venezuela"
+    },{
+      "OrderID":11077,"CustomerID":"RATTC","EmployeeID":1,"OrderDate":"1998-05-06T00:00:00-07:00","RequiredDate":"1998-06-03T00:00:00-07:00","ShippedDate":null,"ShipVia":2,"Freight":8.5300,"ShipName":"Rattlesnake Canyon Grocery","ShipAddress":"2817 Milton Dr.","ShipCity":"Albuquerque","ShipRegion":"NM","ShipPostalCode":"87110","ShipCountry":"USA"
+    }
+  ]
+}
+
+
+
